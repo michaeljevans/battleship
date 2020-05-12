@@ -38,4 +38,12 @@ class Celltest < MiniTest::Test
     assert cell.fired_upon?
   end
 
+  def test_it_can_fire
+    cruiser = Ship.new("Cruiser", 3)
+    cell = Cell.new("B4")
+    assert_equal 2, cell.fire_upon(cruiser)
+    assert_equal 1, cell.fire_upon(cruiser)
+  end
+
+
 end

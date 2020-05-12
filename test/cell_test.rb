@@ -14,6 +14,13 @@ class Celltest < MiniTest::Test
   def test_it_has_readable_attributes
     cell = Cell.new("B4")
     assert_equal "B4", cell.coordinate
+    assert_nil cell.ship
+  end
+
+  def test_it_is_empty?
+    cell = Cell.new("B4")
+    assert cell.empty?
+    
   end
 
 end

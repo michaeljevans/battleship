@@ -24,6 +24,6 @@ class Cell
   end
 
   def fire_upon(ship)
-    ship.health -= 1
+    ship.hit
   end
 end

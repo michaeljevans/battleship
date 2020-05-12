@@ -18,6 +18,7 @@ class Cell
     @ship = ship_type
   end
 
+  # Method needs to be given functionality
   def fired_upon?
     true
   end

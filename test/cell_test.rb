@@ -31,4 +31,11 @@ class Celltest < MiniTest::Test
     refute cell.empty?
   end
 
+  def test_it_is_fired_upon?
+    cruiser = Ship.new("Cruiser", 3)
+    cell = Cell.new("B4")
+    cell.place_ship(cruiser)
+    assert cell.fired_upon?
+  end
+
 end

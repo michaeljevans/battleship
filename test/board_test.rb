@@ -26,6 +26,6 @@ class BoardTest < MiniTest::Test
     board.cells
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
-    board.valid_placement?(cruiser, ["A2","A3","A4"])
+    assert board.valid_placement?(cruiser, ["A2","A3","A4"])
   end
 end

@@ -35,7 +35,10 @@ class Celltest < MiniTest::Test
     cruiser = Ship.new("Cruiser", 3)
     cell = Cell.new("B4")
     cell.place_ship(cruiser)
+    refute cell.fired_upon?
+    cell.fire_upon(cruiser)
     assert cell.fired_upon?
+
   end
 
   def test_it_can_fire

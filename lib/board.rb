@@ -4,6 +4,8 @@ class Board
     @cells
   end
 
+
+# Allow user input into .cells via argument
   def cells
     @cells = {"A1" => cell_1  = Cell.new("A1"),
               "A2" => cell_2  = Cell.new("A2"),
@@ -22,4 +24,9 @@ class Board
               "D3" => cell_15 = Cell.new("D3"),
               "D4" => cell_16 = Cell.new("D4")}
   end
+
+  def valid_coordinates?(coordinate)
+    @cells.include?(coordinate)
+  end
+
 end

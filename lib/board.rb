@@ -38,6 +38,10 @@ class Board
         true_counter += 1
       end
     end
-    true_counter
+    if true_counter == loop
+      true
+    else
+      false
+    end
   end
 end

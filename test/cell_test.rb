@@ -49,4 +49,31 @@ class Celltest < MiniTest::Test
     assert cell.fired_upon?
   end
 
+  def test_it_renders_correctly
+    cell1 = Cell.new("B4")
+
+    assert_equal ".", cell1.render
+
+    cell1.fire_upon
+
+    assert_equal "M", cell1.render
+
+    cell2 = Cell.new("C3")
+    cruiser = Ship.new("Cruiser", 3)
+    cell2.place_ship(cruiser)
+
+    assert_equal ".", cell2.render
+    assert_equal "S", cell2.render(true)
+
+    cell2.fire_upon
+
+    assert_equal "H", cell2.render
+    refute cruiser.sunk?
+
+    cruiser.hit
+    cruiser.hit
+
+    assert cruiser.sunk?
+    assert_equal "X", cell2.render
+  end
 end

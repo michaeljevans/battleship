@@ -29,4 +29,18 @@ class Cell
      @ship.hit
     end
   end
+
+  def render(ship_exists = false)
+    if fired_upon? == false && ship_exists == false
+      "."
+    elsif ship_exists == true
+      "S"
+    elsif fired_upon? == true && !empty? && @ship.health == 0
+      "X"
+    elsif fired_upon? == true && !empty?
+      "H"
+    elsif fired_upon? == true && empty?
+      "M"
+    end
+  end
 end

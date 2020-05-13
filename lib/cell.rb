@@ -19,13 +19,14 @@ class Cell
     @ship = ship_type
   end
 
-  # Method needs to be given functionality
   def fired_upon?
     @fired_upon
   end
 
   def fire_upon(ship)
     @fired_upon = true
-    ship.hit
+    if !empty?
+     @ship.hit
+    end
   end
 end

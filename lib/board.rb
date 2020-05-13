@@ -29,4 +29,15 @@ class Board
     @cells.include?(coordinate)
   end
 
+  def valid_placement?(ship, coord_array)
+    # if coord_array.length != ship.length
+    loop = coord_array.size
+    true_counter = 0
+    coord_array.each do |x|
+      if cells.include?(x)
+        true_counter += 1
+      end
+    end
+    true_counter
+  end
 end

@@ -1,7 +1,7 @@
 class Board
-  attr_reader :cells
+  attr_reader :cells, :size_match
   def initialize
-    @cells = []
+    @cells = {}
   end
 
   def cells
@@ -24,18 +24,38 @@ class Board
   end
 
   def valid_coordinates?(coordinate)
-    @cells.include?(coordinate)
+    @cells.keys.include?(coordinate)
   end
 
   def valid_placement?(ship, coordinate_array)
-    if ship.length != coordinate_array.length
+    binding.pry
+    if size_match?(ship, coordinate_array)
       false
-    elsif @cells.each_cons(coordinate_array.length) != (coordinate_array || -(coordinate_array))
+    elsif coord_in_cell_array?(coordinate_array)
       false
     elsif (coordinate_array[0][0] != coordinate_array[1][0] && coordinate_array[0][1] != coordinate_array[1][1])
       false
     else
       true
+    end
+  end
+
+  def size_match?(ship, coordinate_array)
+    ship.length == coordinate_array.length
+  end
+
+  def coord_in_cell_array?(coordinate_array)
+    loop = coordinate_array.size
+    x = 0
+    coordinate_array.map do |coord|
+      if @cells.keys.include?(coord)
+        x += 1
+      end
+    end
+    if loop == x
+      return true
+    else
+      return false
     end
   end
 end

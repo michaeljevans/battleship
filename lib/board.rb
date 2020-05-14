@@ -1,12 +1,6 @@
 class Board
   attr_reader :cells
   def initialize
-    @cells
-  end
-
-
-# Allow user input into .cells via argument
-  def cells
     @cells = {"A1" => cell_1  = Cell.new("A1"),
               "A2" => cell_2  = Cell.new("A2"),
               "A3" => cell_3  = Cell.new("A3"),
@@ -29,4 +23,15 @@ class Board
     @cells.include?(coordinate)
   end
 
+  def valid_placement?(ship, coordinate_array)
+    if ship.length != coordinate_array.length
+      false
+    elsif @cells.each_cons(coordinate_array.length) != (coordinate_array || -(coordinate_array))
+      false
+    elsif (coordinate_array[0][0] != coordinate_array[1][0] && coordinate_array[0][1] != coordinate_array[1][1])
+      false
+    else
+      true
+    end
+  end
 end

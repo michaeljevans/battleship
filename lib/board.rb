@@ -1,6 +1,10 @@
 class Board
   attr_reader :cells
   def initialize
+    @cells = []
+  end
+
+  def cells
     @cells = {"A1" => cell_1  = Cell.new("A1"),
               "A2" => cell_2  = Cell.new("A2"),
               "A3" => cell_3  = Cell.new("A3"),

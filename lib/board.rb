@@ -24,16 +24,18 @@ class Board
   end
 
   def valid_coordinates?(coordinate)
-    @cells.keys.include?(coordinate)
+    @cells.keys.include?(coordinate.upcase)
   end
 
   def valid_placement?(ship, coordinate_array)
-    binding.pry
-    if size_match?(ship, coordinate_array)
+    validate_coordinates = coordinate_array.map { |coordinate| valid_coordinates?(coordinate) }
+    if validate_coordinates.include?(false)
       false
-    elsif coord_in_cell_array?(coordinate_array)
+    end
+    if ship.length != coordinate_array.length
       false
-    elsif (coordinate_array[0][0] != coordinate_array[1][0] && coordinate_array[0][1] != coordinate_array[1][1])
+    elsif (coordinate_array[0][0] != coordinate_array[1][0] &&
+           coordinate_array[0][1] != coordinate_array[1][1])
       false
     else
       true

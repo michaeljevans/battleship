@@ -1,6 +1,6 @@
 class Board
   attr_reader :cells
-  
+
   def initialize
     @cells = {}
   end
@@ -49,5 +49,21 @@ class Board
   end
 
   def coordinates_consecutive?(coordinate_array)
+    ordinal_values = coordinate_array.map do |element|
+      element[0].ord + element[1].ord
+    end
+    if coordinate_array.length == 2
+      ord_diff_1 = ordinal_values[1] - ordinal_values[0]
+    elsif coordinate_array.length == 3
+      ord_diff_1 = ordinal_values[1] - ordinal_values[0]
+      ord_diff_2 = ordinal_values[2] - ordinal_values[1]
+    end
+    if coordinate_array.length == 3 && (ord_diff_1 != 1 || ord_diff_2 != 1)
+      return true
+    elsif coordinate_array.length == 2 && ord_diff_1 != 1
+      return true
+    else
+      false
+    end
   end
 end

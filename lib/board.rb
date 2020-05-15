@@ -1,5 +1,6 @@
 class Board
-  attr_reader :cells, :size_match
+  attr_reader :cells
+
   def initialize
     @cells = {}
   end
@@ -23,41 +24,30 @@ class Board
               "D4" => cell_16 = Cell.new("D4")}
   end
 
-  def valid_coordinates?(coordinate)
+  def valid_coordinate?(coordinate)
     @cells.keys.include?(coordinate.upcase)
   end
 
   def valid_placement?(ship, coordinate_array)
-    validate_coordinates = coordinate_array.map { |coordinate| valid_coordinates?(coordinate) }
+    validate_coordinates = coordinate_array.map { |coordinate| valid_coordinate?(coordinate) }
     if validate_coordinates.include?(false)
-      false
+      return false
     end
+
+    # Ship length and coordinate array length must match
     if ship.length != coordinate_array.length
       false
+    # Coordinates cannot be diagonal
     elsif (coordinate_array[0][0] != coordinate_array[1][0] &&
            coordinate_array[0][1] != coordinate_array[1][1])
+      false
+    elsif coordinates_consecutive?(coordinate_array)
       false
     else
       true
     end
   end
 
-  def size_match?(ship, coordinate_array)
-    ship.length == coordinate_array.length
-  end
-
-  def coord_in_cell_array?(coordinate_array)
-    loop = coordinate_array.size
-    x = 0
-    coordinate_array.map do |coord|
-      if @cells.keys.include?(coord)
-        x += 1
-      end
-    end
-    if loop == x
-      return true
-    else
-      return false
-    end
+  def coordinates_consecutive?(coordinate_array)
   end
 end

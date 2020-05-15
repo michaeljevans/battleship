@@ -26,7 +26,6 @@ class BoardTest < MiniTest::Test
   end
 
   def test_placement_invalid_if_coordinate_array_length_and_ship_length_are_different
-    skip
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
@@ -52,7 +51,6 @@ class BoardTest < MiniTest::Test
   end
 
   def test_placement_invalid_if_coordinate_array_elements_are_diagonal
-    skip
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)
@@ -66,7 +64,6 @@ class BoardTest < MiniTest::Test
   end
 
   def test_valid_ship_placement
-    skip
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
     submarine = Ship.new("Submarine", 2)

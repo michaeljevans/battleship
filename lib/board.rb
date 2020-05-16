@@ -100,4 +100,21 @@ class Board
     end
   end
 
+  def render
+      @cells.map do |cell|
+        if @cells[cell[0]].fired_upon? == false && !@cells[cell[0]].ship.nil?
+          cell << "."
+          binding.pry
+        # elsif ship_exists == true
+        #   "S"
+        # elsif fired_upon? == true && !empty? && @ship.health == 0
+        #   "X"
+        # elsif fired_upon? == true && !empty?
+        #   "H"
+        # elsif fired_upon? == true && empty?
+        #   "M"
+        end
+      end
+  end
+
 end

@@ -48,7 +48,6 @@ class Board
     if validate_coordinates.include?(false)
       return false
     end
-
     # Ship length and coordinate array length must match
     if ship.length != coordinate_array.length
       false
@@ -58,8 +57,8 @@ class Board
       false
     elsif coordinates_consecutive?(coordinate_array)
       false
-    # elsif duplicate_placement?(coordinate_array)
-    #   false
+    elsif coordinates_overlap?(coordinate_array)
+      false
     else
       true
     end
@@ -84,10 +83,6 @@ class Board
     end
   end
 
-  # def duplicate_placement?(coordinate_array)
-  #
-  # end
-
   def place(ship, coordinate_array)
     if coordinate_array.length == 2
       @cells[coordinate_array[0]].place_ship(ship)
@@ -98,4 +93,11 @@ class Board
       @cells[coordinate_array[2]].place_ship(ship)
     end
   end
+
+  def coordinates_overlap?(coordinate_array)
+    coordinate_array.any? do |element|
+      return true if !@cells[element].ship.nil?
+    end
+  end
+
 end

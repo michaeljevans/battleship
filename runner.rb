@@ -13,30 +13,26 @@ end
 def cpu_placement
   @cpu_board = Board.new
   cpu_cruiser = Ship.new("Cruiser", 3)
+  cpu_submarine = Ship.new("Submarine", 2)
 
+  # Random selection of horizontal or vertical placement of cruiser
   if rand(2) == 0
     horizontal_randomizer(@cpu_board, cpu_cruiser)
   else
     vertical_randomizer(@cpu_board, cpu_cruiser)
   end
-
-  cpu_submarine = Ship.new("Submarine", 2)
-
+  # Random selection of horizontal or vertical placement of
   if rand(2) == 0
     horizontal_randomizer(@cpu_board, cpu_submarine)
   else
     vertical_randomizer(@cpu_board, cpu_submarine)
   end
-
-  binding.pry
 end
 
 def vertical_randomizer(cpu_board, ship_type)
   coordinate_array = []
   column_start = rand(4) + 1
   row = ["A", "B", "C", "D"]
-
-
   if ship_type.name == "Cruiser"
   row_start = rand(3)
   elsif ship_type.name == "Submarine"
@@ -46,7 +42,13 @@ def vertical_randomizer(cpu_board, ship_type)
   ship_type.length.times do |count|
     coordinate_array << ([row[row_start + count]] | [(column_start).to_s]).join
   end
-  cpu_board.place(ship_type, coordinate_array)
+
+  # Checks for valid placement, if not recalls parent method
+  if @cpu_board.valid_placement?(ship_type, coordinate_array)
+    @cpu_board.place(ship_type, coordinate_array)
+  else
+    vertical_randomizer(cpu_board, ship_type)
+  end
 end
 
 def horizontal_randomizer(cpu_board, ship_type)
@@ -62,7 +64,13 @@ def horizontal_randomizer(cpu_board, ship_type)
   ship_type.length.times do |count|
     coordinate_array << ([row_start] | [(column_start + count).to_s]).join
   end
-  cpu_board.place(ship_type, coordinate_array)
+
+  # Checks for valid placement, if not recalls parent method
+  if @cpu_board.valid_placement?(ship_type, coordinate_array)
+    @cpu_board.place(ship_type, coordinate_array)
+  else
+    horizontal_randomizer(cpu_board, ship_type)
+  end
 end
 
 
@@ -83,4 +91,5 @@ end
 
 start
 cpu_placement
-# player_placement
+@cpu_board.render(true)
+player_placement

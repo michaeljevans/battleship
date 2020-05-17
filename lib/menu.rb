@@ -20,7 +20,8 @@ class Menu
     elsif @selection == "p"
       cpu_placement
     else
-      puts "Invalid selection"
+      puts "Invalid selection \n \n"
+      main_menu
     end
   end
 

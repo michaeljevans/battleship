@@ -80,9 +80,13 @@ def player_placement
   player_cruiser = Ship.new("Cruiser", 3)
   player_submarine = Ship.new("Submarine", 2)
 
-  p "Enter the squares for the Cruiser (3 spaces):"
+  puts "I have laid out my ships on the grid."
+  puts "You now need to lay out your two ships."
+  puts "The Cruiser is three units long and the Submarine is two units long."
+  puts player_board.render(true)
+  puts "Enter the squares for the Cruiser (3 spaces):"
   cruiser_placement = gets.chomp
-  p "Enter the squares for the Submarine (2 spaces):"
+  puts "Enter the squares for the Submarine (2 spaces):"
   submarine_placement = gets.chomp
 
   player_board.place(player_cruiser, cruiser_placement.split(" "))
@@ -91,5 +95,6 @@ end
 
 start
 cpu_placement
+puts "TESTING @cpu_board.render(true)"
 @cpu_board.render(true)
 player_placement

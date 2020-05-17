@@ -12,15 +12,15 @@ class Menu
   end
 
   def main_menu
-    p "Welcome to BATTLESHIP"
-    p "Enter p to play. Enter q to quit."
+    puts "Welcome to BATTLESHIP"
+    puts "Enter p to play. Enter q to quit."
     @selection = gets.chomp.downcase
     if @selection == "q"
       exit
     elsif @selection == "p"
       cpu_placement
     else
-      p "Invalid selection"
+      puts "Invalid selection"
     end
   end
 

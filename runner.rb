@@ -84,13 +84,28 @@ def player_placement
   puts "You now need to lay out your two ships."
   puts "The Cruiser is three units long and the Submarine is two units long."
   puts @player_board.render(true)
-  puts "Enter the squares for the Cruiser (3 spaces):"
-  cruiser_placement = gets.chomp
-  puts "Enter the squares for the Submarine (2 spaces):"
-  submarine_placement = gets.chomp
 
-  @player_board.place(player_cruiser, cruiser_placement.split(" "))
-  @player_board.place(player_submarine, submarine_placement.split(" "))
+  # Begin user input
+  puts "Enter the squares for the Cruiser (3 spaces):"
+  cruiser_placement = gets.chomp.upcase.split(' ')
+  # Checks that player inputs valid coordinates
+  until @player_board.valid_placement?(player_cruiser, cruiser_placement) == true
+      p "The coordinates you entered are not a valid placement for the Cruiser. Try again: "
+      cruiser_placement = gets.chomp.upcase.split(' ')
+  end
+  # Places player cruiser on Board
+  @player_board.place(player_cruiser, cruiser_placement)
+
+  # Begin user input
+  puts "Enter the squares for the Submarine (2 spaces):"
+  submarine_placement = gets.chomp.upcase.split(' ')
+  # Checks that player inputs valid coordinates
+  until @player_board.valid_placement?(player_submarine, submarine_placement) == true
+      p "The coordinates you entered are not a valid placement for the Submarine. Try again: "
+      submarine_placement = gets.chomp.upcase.split(' ')
+  end
+  # Places player submarine on Board
+  @player_board.place(player_submarine, submarine_placement)
 end
 
 start
@@ -98,4 +113,5 @@ cpu_placement
 puts "TESTING @cpu_board.render(true)"
 @cpu_board.render(true)
 player_placement
+binding.pry
 @player_board.render(true)

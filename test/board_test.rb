@@ -87,7 +87,6 @@ class BoardTest < MiniTest::Test
   end
 
   def test_it_renders
-    skip
     board = Board.new
     cruiser = Ship.new("Cruiser", 3)
     board.place(cruiser, ["A1", "A2", "A3"])

@@ -22,21 +22,13 @@ class ShipTest < MiniTest::Test
     cruiser = Ship.new("Cruiser", 3)
 
     assert_equal false, cruiser.sunk?
-
     cruiser.hit
-
     assert_equal false, cruiser.sunk?
-
     cruiser.hit
-
     assert_equal false, cruiser.sunk?
-
     cruiser.hit
-
     assert_equal true, cruiser.sunk?
-
     cruiser.hit
-
     assert_equal true, cruiser.sunk?
   end
 end

@@ -1,8 +1,8 @@
 class Turn
 
-  attr_reader :cpu_placement
-              :player_placement
-              :cpu_board
+  attr_reader :cpu_placement,
+              :player_placement,
+              :cpu_board,
               :player_board
 
   def initialize()
@@ -10,12 +10,38 @@ class Turn
     @player_placement
     @cpu_board
     @player_board
+    @cpu_cruiser = Ship.new("Cruiser", 3)
+    @cpu_submarine = Ship.new("Submarine", 2)
+    @player_cruiser = Ship.new("Cruiser", 3)
+    @player_submarine = Ship.new("Submarine", 2)
+
   end
 
-  def cpu_placement
+  def play
+    cpu_placement(@cpu_cruiser, @cpu_submarine)
+    player_placement(@player_cruiser, @player_submarine)
+    until (@cpu_cruiser.health == 0 && @cpu_submarine.health == 0) || (@player_cruiser.health == 0 && @player_submarine.health == 0)
+      p "========== COMPUTER BOARD =========="
+      print @cpu_board.render
+      p "=========== PLAYER BOARD ==========="
+      print @player_board.render(true)
+      cpu_fire
+      player_fire
+    end
+
+    if (@cpu_cruiser.health == 0 && @cpu_submarine.health == 0)
+      p "You beat the computer!"
+      back_to_menu = Menu.new
+      back_to_menu.main_menu
+    elsif (@player_cruiser.health == 0 && @player_submarine.health == 0)
+      p "You lost to a dumbass computer!"
+      back_to_menu = Menu.new
+      back_to_menu.main_menu
+    end
+  end
+
+  def cpu_placement(cpu_cruiser, cpu_submarine)
     @cpu_board = Board.new
-    cpu_cruiser = Ship.new("Cruiser", 3)
-    cpu_submarine = Ship.new("Submarine", 2)
 
     # Random selection of horizontal or vertical placement of cruiser
     if rand(2) == 0
@@ -75,13 +101,8 @@ class Turn
     end
   end
 
-
-
-  def player_placement
+  def player_placement(player_cruiser, player_submarine)
     @player_board = Board.new
-    player_cruiser = Ship.new("Cruiser", 3)
-    player_submarine = Ship.new("Submarine", 2)
-
     puts "I have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
@@ -97,6 +118,7 @@ class Turn
     end
     # Places player cruiser on Board
     @player_board.place(player_cruiser, cruiser_placement)
+    @player_board.render(true)
 
     # Begin user input
     puts "Enter the squares for the Submarine (2 spaces):"
@@ -108,6 +130,30 @@ class Turn
     end
     # Places player submarine on Board
     @player_board.place(player_submarine, submarine_placement)
+    @player_board.render(true)
   end
 
+  def cpu_fire
+    possible_locations = @player_board.cells.keys
+    firing_location = possible_locations.sample
+    if @player_board.cells[firing_location].fired_upon? == false
+      @player_board.cells[firing_location].fire_upon
+    elsif @player_board.cells[firing_location].fired_upon? == true
+      cpu_fire
+    end
+  end
+
+  def player_fire
+    print "Please enter a coordinate on which to fire your shot: "
+    player_shot = gets.chomp.upcase
+    until @cpu_board.valid_coordinate?(player_shot) == true
+      print "That's not a valid coordinate! Try again: "
+      player_shot = gets.chomp.upcase
+    end
+    until @cpu_board.cells[player_shot].fired_upon? == false
+      print "You've already fired on that location! Try again: "
+      player_shot = gets.chomp.upcase
+    end
+    @cpu_board.cells[player_shot].fire_upon
+  end
 end

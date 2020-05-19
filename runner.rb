@@ -2,20 +2,10 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require './lib/cell'
 require './lib/ship'
-require './lib/menu'
+require './lib/board'
 require './lib/turn'
+require './lib/menu'
 require 'pry'
 
-def start
-  run_menu = Menu.new
-  run_menu.main_menu
-end
-
-start
-turn = Turn.new
-turn.cpu_placement
-turn.player_placement
-binding.pry
-
-# @cpu_board.render(true)
-# @player_board.render(true)
+run_menu = Menu.new
+run_menu.main_menu

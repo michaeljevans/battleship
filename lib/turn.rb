@@ -30,11 +30,21 @@ class Turn
     end
 
     if (@cpu_cruiser.health == 0 && @cpu_submarine.health == 0)
+      p "========== COMPUTER BOARD =========="
+      print @cpu_board.render
+      p "=========== PLAYER BOARD ==========="
+      print @player_board.render(true)
       p "You beat the computer!"
+      sleep(1)
       back_to_menu = Menu.new
       back_to_menu.main_menu
     elsif (@player_cruiser.health == 0 && @player_submarine.health == 0)
+      p "========== COMPUTER BOARD =========="
+      print @cpu_board.render
+      p "=========== PLAYER BOARD ==========="
+      print @player_board.render(true)
       p "You lost to a dumbass computer!"
+      sleep(1)
       back_to_menu = Menu.new
       back_to_menu.main_menu
     end

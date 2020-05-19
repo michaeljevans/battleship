@@ -1,9 +1,3 @@
-require 'minitest/autorun'
-require 'minitest/pride'
-require './lib/cell'
-require './lib/ship'
-require './lib/board'
-
 class Menu
   attr_reader :selection
 
@@ -18,17 +12,12 @@ class Menu
     if @selection == "q"
       exit
     elsif @selection == "p"
-      cpu_placement
+      turn = Turn.new
+      turn.play
     else
       puts "Invalid selection \n \n"
       main_menu
     end
-  end
-
-  def cpu_placement
-
-
-    # @cells.select.valid_placement?
   end
 
 end

@@ -14,6 +14,7 @@ class Turn
     @cpu_submarine = Ship.new("Submarine", 2)
     @player_cruiser = Ship.new("Cruiser", 3)
     @player_submarine = Ship.new("Submarine", 2)
+    @cpu_intelligence_next_shot = ""
 
   end
 
@@ -146,11 +147,55 @@ class Turn
   def cpu_fire
     possible_locations = @player_board.cells.keys
     firing_location = possible_locations.sample
-    if @player_board.cells[firing_location].fired_upon? == false
-      @player_board.cells[firing_location].fire_upon
-    elsif @player_board.cells[firing_location].fired_upon? == true
-      cpu_fire
+    if @cpu_intelligence_next_shot != ""
+      if @player_board.cells[@cpu_intelligence_next_shot].fired_upon? == false
+        @player_board.cells[@cpu_intelligence_next_shot].fire_upon
+      elsif @player_board.cells[@cpu_intelligence_next_shot].fired_upon? == true
+        cpu_fire
+      end
+    else
+      if @player_board.cells[firing_location].fired_upon? == false
+        @player_board.cells[firing_location].fire_upon
+      elsif @player_board.cells[firing_location].fired_upon? == true
+        cpu_fire
+      end
     end
+    @cpu_intelligence_next_shot = ""
+    if !@player_board.cells[firing_location].ship.nil?
+      cpu_intelligence(firing_location)
+    end
+  end
+
+  def cpu_intelligence(firing_location)
+    split_successful_shot = firing_location.split('')
+    if split_successful_shot[1].to_i < @cpu_board.cells.keys.last.split('')[1].to_i
+      split_successful_shot[1] = (split_successful_shot[1].to_i + 1).to_s
+      next_shot = split_successful_shot.join
+      @cpu_intelligence_next_shot = next_shot
+      until @player_board.cells[next_shot].fired_upon? == false
+        if split_successful_shot[1].to_i < @cpu_board.cells.keys.last.split('')[1].to_i
+          split_successful_shot[1] = (split_successful_shot[1].to_i + 1).to_s
+          next_shot = split_successful_shot.join
+          @cpu_intelligence_next_shot = next_shot
+        else
+          break
+        end
+      end
+    elsif split_successful_shot[1].to_i == @cpu_board.cells.keys.last.split('')[1].to_i
+      split_successful_shot[1] = (split_successful_shot[1].to_i - 1).to_s
+      next_shot = split_successful_shot.join
+      until @player_board.cells[next_shot].fired_upon? == false
+        if split_successful_shot[1].to_i == @cpu_board.cells.keys.last.split('')[1].to_i
+          (split_successful_shot[1] -= 1).to_s
+          next_shot = split_successful_shot.join
+          @cpu_intelligence_next_shot = next_shot
+        else
+          break
+        end
+      end
+    end
+    @cpu_intelligence_next_shot
+    return @cpu_intelligence_next_shot
   end
 
   def player_fire

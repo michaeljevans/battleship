@@ -6,8 +6,6 @@ class Turn
               :player_board
 
   def initialize()
-    @cpu_placement
-    @player_placement
     @cpu_board
     @player_board
     @cpu_cruiser = Ship.new("Cruiser", 3)
@@ -154,8 +152,8 @@ class Turn
     @player_board.render(true)
   end
 
-  # This method will fire an initial shot randomly.  If the shot is a hit,
-  # the coordinates will be sent to th `cpu_intelligence` method for an
+  # This method will fire an initial shot randomly. If the shot is a hit,
+  # the coordinates will be sent to the `cpu_intelligence` method for an
   # "intelligent" decision on where to fire next.
   def cpu_fire
     possible_locations = @player_board.cells.keys
@@ -184,7 +182,7 @@ class Turn
 
   # This method takes in a fired upon coordinate that resulted in a hit
   # and adjusts the aim for the follow up shot based on the successful
-  # shot's position.  This method is called upon from the `cpu_fire`
+  # shot's position. This method is called upon from the `cpu_fire`
   # method.
   def cpu_intelligence(firing_location)
     split_successful_shot = firing_location.split('')
@@ -199,8 +197,8 @@ class Turn
     end
   end
 
-  # Accepts player input for firing position.  Checks that entered coordinates
-  # are valid via the `valid_coordinate` method in the `Board` class.
+  # Accepts player input for firing position. Checks that entered coordinates
+  # are valid via the `valid_coordinate?` method in the `Board` class.
   def player_fire
     print "Please enter a coordinate on which to fire your shot: "
     player_shot = gets.chomp.upcase

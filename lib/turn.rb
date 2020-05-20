@@ -18,6 +18,7 @@ class Turn
 
   end
 
+  # Controls the flow of the game
   def play
     cpu_placement(@cpu_cruiser, @cpu_submarine)
     player_placement(@player_cruiser, @player_submarine)
@@ -51,6 +52,10 @@ class Turn
     end
   end
 
+  # Method for randomly selecting whether individual ships are placed
+  # horizontally or vertically. Depending on the selection, the objects are
+  # sent to either the vertical or horizontal randomizer methods for individual
+  # coordinate selections.
   def cpu_placement(cpu_cruiser, cpu_submarine)
     @cpu_board = Board.new
 
@@ -60,7 +65,7 @@ class Turn
     else
       vertical_randomizer(@cpu_board, cpu_cruiser)
     end
-    # Random selection of horizontal or vertical placement of
+    # Random selection of horizontal or vertical placement of submarine
     if rand(2) == 0
       horizontal_randomizer(@cpu_board, cpu_submarine)
     else
@@ -68,6 +73,8 @@ class Turn
     end
   end
 
+  # Randomly chooses ship placement if ship is chosen to be placed vertically
+  # in the cpu_placement method
   def vertical_randomizer(cpu_board, ship_type)
     coordinate_array = []
     column_start = rand(4) + 1
@@ -82,7 +89,7 @@ class Turn
       coordinate_array << ([row[row_start + count]] | [(column_start).to_s]).join
     end
 
-    # Checks for valid placement, if not recalls parent method
+  # Checks for valid placement, if not uses recursion on this same method.
     if @cpu_board.valid_placement?(ship_type, coordinate_array)
       @cpu_board.place(ship_type, coordinate_array)
     else
@@ -90,6 +97,8 @@ class Turn
     end
   end
 
+  # Randomly chooses ship placement if ship is chosen to be placed horizontally
+  # in the cpu_placement method
   def horizontal_randomizer(cpu_board, ship_type)
     coordinate_array = []
     row_start = ["A", "B", "C", "D"].sample
@@ -104,7 +113,7 @@ class Turn
       coordinate_array << ([row_start] | [(column_start + count).to_s]).join
     end
 
-    # Checks for valid placement, if not recalls parent method
+    # Checks for valid placement, if not uses recursion on this same method.
     if @cpu_board.valid_placement?(ship_type, coordinate_array)
       @cpu_board.place(ship_type, coordinate_array)
     else
@@ -112,6 +121,7 @@ class Turn
     end
   end
 
+  # Allows for initial player placement of ships on the board.
   def player_placement(player_cruiser, player_submarine)
     @player_board = Board.new
     puts "I have laid out my ships on the grid."
@@ -144,60 +154,53 @@ class Turn
     @player_board.render(true)
   end
 
+  # This method will fire an initial shot randomly.  If the shot is a hit,
+  # the coordinates will be sent to th `cpu_intelligence` method for an
+  # "intelligent" decision on where to fire next.
   def cpu_fire
     possible_locations = @player_board.cells.keys
     firing_location = possible_locations.sample
     if @cpu_intelligence_next_shot != ""
       if @player_board.cells[@cpu_intelligence_next_shot].fired_upon? == false
         @player_board.cells[@cpu_intelligence_next_shot].fire_upon
+        if !@player_board.cells[@cpu_intelligence_next_shot].ship.nil?
+          cpu_intelligence(@cpu_intelligence_next_shot)
+        end
       elsif @player_board.cells[@cpu_intelligence_next_shot].fired_upon? == true
+        @cpu_intelligence_next_shot = ""
         cpu_fire
       end
     else
       if @player_board.cells[firing_location].fired_upon? == false
         @player_board.cells[firing_location].fire_upon
+        if !@player_board.cells[firing_location].ship.nil?
+          cpu_intelligence(firing_location)
+        end
       elsif @player_board.cells[firing_location].fired_upon? == true
         cpu_fire
       end
     end
-    @cpu_intelligence_next_shot = ""
-    if !@player_board.cells[firing_location].ship.nil?
-      cpu_intelligence(firing_location)
-    end
   end
 
+  # This method takes in a fired upon coordinate that resulted in a hit
+  # and adjusts the aim for the follow up shot based on the successful
+  # shot's position.  This method is called upon from the `cpu_fire`
+  # method.
   def cpu_intelligence(firing_location)
     split_successful_shot = firing_location.split('')
     if split_successful_shot[1].to_i < @cpu_board.cells.keys.last.split('')[1].to_i
       split_successful_shot[1] = (split_successful_shot[1].to_i + 1).to_s
       next_shot = split_successful_shot.join
       @cpu_intelligence_next_shot = next_shot
-      until @player_board.cells[next_shot].fired_upon? == false
-        if split_successful_shot[1].to_i < @cpu_board.cells.keys.last.split('')[1].to_i
-          split_successful_shot[1] = (split_successful_shot[1].to_i + 1).to_s
-          next_shot = split_successful_shot.join
-          @cpu_intelligence_next_shot = next_shot
-        else
-          break
-        end
-      end
     elsif split_successful_shot[1].to_i == @cpu_board.cells.keys.last.split('')[1].to_i
       split_successful_shot[1] = (split_successful_shot[1].to_i - 1).to_s
       next_shot = split_successful_shot.join
-      until @player_board.cells[next_shot].fired_upon? == false
-        if split_successful_shot[1].to_i == @cpu_board.cells.keys.last.split('')[1].to_i
-          (split_successful_shot[1] -= 1).to_s
-          next_shot = split_successful_shot.join
-          @cpu_intelligence_next_shot = next_shot
-        else
-          break
-        end
-      end
+      @cpu_intelligence_next_shot = next_shot
     end
-    @cpu_intelligence_next_shot
-    return @cpu_intelligence_next_shot
   end
 
+  # Accepts player input for firing position.  Checks that entered coordinates
+  # are valid via the `valid_coordinate` method in the `Board` class.
   def player_fire
     print "Please enter a coordinate on which to fire your shot: "
     player_shot = gets.chomp.upcase
